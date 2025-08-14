@@ -14,6 +14,13 @@ const creation = async (req, res) => {
         // Vérifier que le projet existe
         const projetExiste = await Projet.findById(projet);
         if (!projetExiste) return res.status(404).json({ message: "Le projet spécifié n'existe pas" });
+         
+        const tacheExistante = await gestion.findOne({ nom });
+
+        if (tacheExistante) {
+            return res.status(400).json({ message: "La tâche existe déjà" });
+     }
+
 
         const Tache = new gestion({ nom, details, statut, priorite, dateLimite, assigneeA, creePar, projet });
         await Tache.save();
