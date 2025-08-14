@@ -39,24 +39,43 @@ const afficherparID =(async (req,res)=>{
 }
 )
 
-//modiffier un projet
-const modifier=(async (req,res)=>{
-    const userId = req.params.id
-    const {nom,email,description,timestamps} = req.body;
+// //modiffier un projet
+// const modifier=(async (req,res)=>{
+//     const userId = req.params.id
+//     const {nom,email,description,timestamps} = req.body;
 
-    try{
-      const projet = await Projet.findByIdAndUpdate(userId,
-        {nom,description,timestamps},
-        {new:true}
-      );
+//     try{
+//       const projet = await Projet.findByIdAndUpdate(userId,
+//         {nom,description,timestamps},
+//         {new:true}
+//       );
 
-      res.status(200).json(projet);
-    }catch(err){
-        console.error('error lors de la modification du projet ', err.message)
-        res.status(500).json({message:'erreur lors de la modification du projet',err})
+//       res.status(200).json(projet);
+//     }catch(err){
+//         console.error('error lors de la modification du projet ', err.message)
+//         res.status(500).json({message:'erreur lors de la modification du projet',err})
+//     }
+// }
+// )
+
+// Modifier une tâche
+const modifier = async (req, res) => {
+    const taskId = req.params.id;
+    const updateInfos = Object.keys(req.body);
+
+    try {
+        const projet = await Projet.findById(taskId);
+        if (!projet) return res.status(404).json({ message: "Projet non trouvée" });
+
+        updateInfos.forEach(update => projet[update] = req.body[update]);
+        await projet.save();
+
+        res.status(200).json({ message: 'Projet modifié avec succès', projet });
+    } catch (err) {
+        console.error('Erreur modification Projet:', err);
+        res.status(500).json({ message: 'Erreur lors de la modification du Projet', err });
     }
-}
-)
+};
 
 //supprimé projet
 const supprimer = (async (req,res)=>{
