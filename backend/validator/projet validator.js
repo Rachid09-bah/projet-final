@@ -21,26 +21,6 @@ const projetSchema = Joi.object({
             'string.max': 'La description ne peut pas dépasser 500 caractères',
             'any.required': 'La description du projet est obligatoire'
         }),
-    dateDebut: Joi.date()
-        .required()
-        .messages({
-            'date.base': 'La date de début doit être une date valide',
-            'any.required': 'La date de début est obligatoire'
-        }),
-    dateFin: Joi.date()
-        .greater(Joi.ref('dateDebut'))
-        .required()
-        .messages({
-            'date.base': 'La date de fin doit être une date valide',
-            'date.greater': 'La date de fin doit être postérieure à la date de début',
-            'any.required': 'La date de fin est obligatoire'
-        }),
-    creePar: Joi.string()
-        .required()
-        .messages({
-            'string.empty': 'Le créateur du projet est obligatoire',
-            'any.required': 'Le créateur du projet est obligatoire'
-        })
 });
 
 module.exports = { projetSchema };
